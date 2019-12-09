@@ -75,7 +75,8 @@ int main(){
 	do_sort<int>("odd-even", odd_even);
 	do_sort<int>("comb", comb, 1.3);
 	do_sort<int>("gnome", gnome);
-	do_sort<int>("quick", quick);
+	do_sort<int>("quick_hoare", quick_hoare);
+	do_sort<int>("quick_lomuto", quick_lomuto);
 	do_sort<int>("selection", selection);
 	endwin();
 }
