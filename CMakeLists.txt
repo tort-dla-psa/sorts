@@ -4,6 +4,7 @@ project(sorts VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+include_directories(sorts sorts_vis)
 add_executable(sorts main.cpp)
 add_executable(sorts_vis main_vis.cpp)
 
