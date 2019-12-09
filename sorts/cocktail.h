@@ -11,6 +11,9 @@ void cocktail(std::vector<T> &arr, order o, int begin, int end, int &swaps, int 
 #else
 void cocktail(std::vector<T> &arr, order o, int begin, int end){
 #endif
+#ifdef SORT_VIZ
+	viz(arr);
+#endif
 	bool sorted;
 	auto predicate = (o == regular)?
 		[](const T &el1, const T &el2){ return el1>el2; }
@@ -31,6 +34,9 @@ void cocktail(std::vector<T> &arr, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 				swaps++;
 #endif
+#ifdef SORT_VIZ
+				viz(arr);
+#endif
 			}
 		}
 
@@ -49,9 +55,15 @@ void cocktail(std::vector<T> &arr, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 				swaps++;
 #endif
+#ifdef SORT_VIZ
+				viz(arr);
+#endif
 			}
 		}
 	}while(!sorted);
+#ifdef SORT_VIZ
+	viz(arr);
+#endif
 }
 
 template<class T>

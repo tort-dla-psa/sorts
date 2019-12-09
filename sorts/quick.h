@@ -10,6 +10,9 @@ void quick_hoare(std::vector<T> &arr, order o, int begin, int end, int &swaps, i
 #else
 void quick_hoare(std::vector<T> &arr, order o, int begin, int end){
 #endif
+#ifdef SORT_VIZ
+	viz(arr);
+#endif
 	if(begin>=end){
 		return;
 	}
@@ -43,6 +46,9 @@ void quick_hoare(std::vector<T> &arr, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 		swaps++;
 #endif
+#ifdef SORT_VIZ
+		viz(arr);
+#endif
 	}
 #ifdef SORT_VERBOSE
 	quick_hoare(arr, o, begin, pivot_place, swaps, compares);
@@ -50,6 +56,9 @@ void quick_hoare(std::vector<T> &arr, order o, int begin, int end){
 #else
 	quick_hoare(arr, o, begin, pivot_place);
 	quick_hoare(arr, o, pivot_place+1, end);
+#endif
+#ifdef SORT_VIZ
+	viz(arr);
 #endif
 }
 
@@ -69,6 +78,9 @@ template<class T>
 void quick_lomuto(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
 #else
 void quick_lomuto(std::vector<T> &arr, order o, int begin, int end){
+#endif
+#ifdef SORT_VIZ
+	viz(arr);
 #endif
 	if(begin>=end){
 		return;
@@ -91,6 +103,9 @@ void quick_lomuto(std::vector<T> &arr, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 			swaps++;
 #endif
+#ifdef SORT_VIZ
+			viz(arr);
+#endif
 		}
 	}
 	std::swap(arr.at(i), arr.at(end));
@@ -102,6 +117,9 @@ void quick_lomuto(std::vector<T> &arr, order o, int begin, int end){
 #else
 	quick_lomuto(arr, o, begin, pivot_place-1);
 	quick_lomuto(arr, o, pivot_place+1, end);
+#endif
+#ifdef SORT_VIZ
+	viz(arr);
 #endif
 }
 

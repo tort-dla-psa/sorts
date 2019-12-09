@@ -4,13 +4,13 @@ project(sorts VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-include_directories(sorts sorts_vis tests)
+include_directories(sorts tests)
 add_executable(sorts main.cpp)
-add_executable(sorts_vis main_vis.cpp)
 
 set(CURSES_NEED_NCURSES TRUE)
+target_compile_options(sorts PRIVATE -DSORT_VIZ)
 find_package(Curses REQUIRED)
-target_link_libraries(sorts_vis ${CURSES_LIBRARIES})
+target_link_libraries(sorts ${CURSES_LIBRARIES})
 
 add_executable(test_bubble tests/bubble.cpp)
 add_test(test_bubble test_bubble)

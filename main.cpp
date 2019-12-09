@@ -1,4 +1,3 @@
-#define SORT_VERBOSE
 #include <iostream>
 #include <algorithm>
 #include <numeric>
@@ -9,6 +8,10 @@
 #include "sorts/gnome.h"
 #include "sorts/quick.h"
 #include "sorts/selection.h"
+
+#ifndef SORT_VIZ
+	#include <ncurses.h>
+#endif
 
 template<class T>
 inline std::vector<T> gen_vec(size_t n){
@@ -36,7 +39,7 @@ void do_sort(const std::string &name, void(*f)(std::vector<T>&)){
 	auto arr = gen_vec<T>(50);
 	std::cout<<name<<":\n";
 	print(arr);
-#ifdef SORT_VERBOSE
+#if defined(SORT_VERBOSE) && !defined(SORT_VIZ)
 	f(arr, swaps, compares);
 	print(arr);
 	std::cout<<"swaps:"<<swaps<<"\ncompares:"<<compares<<"\n\n";
@@ -57,7 +60,7 @@ void do_sort(const std::string &name, void(*f)(std::vector<T>&, double), double 
 	auto arr = gen_vec<T>(50);
 	std::cout<<name<<":\n";
 	print(arr);
-#ifdef SORT_VERBOSE
+#if defined(SORT_VERBOSE) && !defined(SORT_VIZ)
 	f(arr, param, swaps, compares);
 	print(arr);
 	std::cout<<"swaps:"<<swaps<<"\ncompares:"<<compares<<"\n\n";
@@ -68,6 +71,9 @@ void do_sort(const std::string &name, void(*f)(std::vector<T>&, double), double 
 }
 
 int main(){
+#ifdef SORT_VIZ
+	initscr();
+#endif
 	do_sort<int>("bubble", bubble);
 	do_sort<int>("cocktail", cocktail);
 	do_sort<int>("odd-even", odd_even);
@@ -76,4 +82,7 @@ int main(){
 	do_sort<int>("quick_hoare", quick_hoare);
 	do_sort<int>("quick_lomuto", quick_lomuto);
 	do_sort<int>("selection", selection);
+#ifdef SORT_VIZ
+	endwin();
+#endif
 }

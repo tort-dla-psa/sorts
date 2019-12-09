@@ -3,12 +3,16 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <ncurses.h>
 
 template<class T>
 #ifdef SORT_VERBOSE
 void bubble(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
 #else
 void bubble(std::vector<T> &arr, order o, int begin, int end){
+#endif
+#ifdef SORT_VIZ
+	viz(arr);
 #endif
 	bool sorted;
 	auto predicate = (o == regular)?
@@ -29,9 +33,15 @@ void bubble(std::vector<T> &arr, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 				swaps++;
 #endif
+#ifdef SORT_VIZ
+				viz(arr);
+#endif
 			}
 		}
 	}while(!sorted);
+#ifdef SORT_VIZ
+	viz(arr);
+#endif
 }
 
 template<class T>

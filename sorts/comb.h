@@ -11,6 +11,9 @@ void comb(std::vector<T> &arr, order o, double shrink, int begin, int end, int &
 #else
 void comb(std::vector<T> &arr, order o, double shrink, int begin, int end){
 #endif
+#ifdef SORT_VIZ
+	viz(arr);
+#endif
     auto gap = arr.size();
     bool sorted;
 	auto predicate = (o == regular)?
@@ -36,9 +39,15 @@ void comb(std::vector<T> &arr, order o, double shrink, int begin, int end){
 #ifdef SORT_VERBOSE
                 swaps++;
 #endif
+#ifdef SORT_VIZ
+                viz(arr);
+#endif
             }
         }
     }while(!sorted);
+#ifdef SORT_VIZ
+    viz(arr);
+#endif
 }
 
 template<class T>

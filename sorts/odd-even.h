@@ -11,6 +11,9 @@ void odd_even(std::vector<T> &vec, order o, int begin, int end, int &swaps, int 
 #else
 void odd_even(std::vector<T> &vec, order o, int begin, int end){
 #endif
+#ifdef SORT_VIZ
+	viz(vec);
+#endif
 	bool sorted;
 	auto predicate = (o == regular)?
 		[](const T &el1, const T &el2){ return el1>el2; }
@@ -31,6 +34,9 @@ void odd_even(std::vector<T> &vec, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 				swaps++;
 #endif
+#ifdef SORT_VIZ
+				viz(vec);
+#endif
 			}
 		}
 		if(sorted){
@@ -48,9 +54,18 @@ void odd_even(std::vector<T> &vec, order o, int begin, int end){
 #ifdef SORT_VERBOSE
 				swaps++;
 #endif
+#ifdef SORT_VIZ
+				viz(vec);
+#endif
 			}
 		}
+#ifdef SORT_VIZ
+		viz(vec);
+#endif
 	}while(!sorted);
+#ifdef SORT_VIZ
+	viz(vec);
+#endif
 }
 
 template<class T>
