@@ -1,57 +1,39 @@
 #pragma once
-#include "sort.h"
-#include <vector>
 #include <algorithm>
 #include <functional>
 
-template<class T>
-#ifdef SORT_VERBOSE
-void gnome(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
-#else
-void gnome(std::vector<T> &arr, order o, int begin, int end){
-#endif
-#ifdef SORT_VIZ
-    viz(arr);
-#endif
-	auto predicate = (o == regular)?
-		[](const T &el1, const T &el2){ return el1>el2; }
-		:
-		[](const T &el1, const T &el2){ return el1<el2; };
-	size_t pos = 0;
-	while(pos<end){
-		if(pos == 0){
-			pos++;
+namespace sorts{
+
+template<class It, class Pred>
+void gnome(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+	auto pos = beg;
+	while(pos != end){
+		if(pos == beg){
+			pos = std::next(pos);
 		}else{
-			auto &el = arr.at(pos);
-			auto &el_prev = arr.at(pos-1);
-#ifdef SORT_VERBOSE
-			compares++;
-#endif
+			auto &el = *pos;
+			auto &el_prev = *std::prev(pos);
 			if(predicate(el_prev, el)){
 				std::swap(el_prev, el);
-				pos--;
-#ifdef SORT_VERBOSE
-				swaps++;
-#endif
-#ifdef SORT_VIZ
-				viz(arr);
-#endif
+				pos = std::prev(pos);
 			}else{
-				pos++;
+				pos = std::next(pos);
 			}
 		}
 	}
-#ifdef SORT_VIZ
-	viz(arr);
-#endif
 }
 
-template<class T>
-#ifdef SORT_VERBOSE
-void gnome(std::vector<T> &arr, int &swaps, int &compares){
-	gnome(arr, order::regular, 0, arr.size(), swaps, compares);
-#else
-void gnome(std::vector<T> &arr){
-	gnome(arr, order::regular, 0, arr.size());
-#endif
+template<class It, class Pred>
+void gnome(It beg, It end, Pred predicate){
+    static size_t swaps, compares;
+    gnome(beg, end, predicate, swaps, compares);
+}
+
+template<class It>
+void gnome(It beg, It end){
+	using T = typename It::value_type;
+	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
+    gnome(beg, end, func);
+}
+
 }

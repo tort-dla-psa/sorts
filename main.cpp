@@ -23,7 +23,7 @@ inline std::vector<T> gen_vec(size_t n){
 
 template<class T>
 void print(const std::vector<T> &vec){
-	std::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(std::cout, " "));
+	std::copy(vec.begin(), vec.end(), std::ostream_iterator<T>(std::cout, " "));
 	std::cout<<"\n";
 }
 

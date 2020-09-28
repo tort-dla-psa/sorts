@@ -1,56 +1,38 @@
 #pragma once
-#include "sort.h"
-#include <vector>
 #include <algorithm>
 #include <functional>
 
-template<class T>
-#ifdef SORT_VERBOSE
-void selection(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
-#else
-void selection(std::vector<T> &arr, order o, int begin, int end){
-#endif
-#ifdef SORT_VIZ
-    viz(arr);
-#endif
-	bool sorted;
-	auto predicate = (o == regular)?
-		[](const T &el1, const T &el2){ return el1>el2; }
-		:
-		[](const T &el1, const T &el2){ return el1<el2; };
+namespace sorts{
 
-    for (size_t i = begin; i < end; i++) {
-        int el = i;
-        for (size_t j = i+1; j < end; j++) {
-#ifdef SORT_VERBOSE
+template<class It, class Pred>
+void selection(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+    for (auto i = beg; i != end; i = std::next(i)) {
+        auto el = i;
+        for (auto j = std::next(i); j != end; j = std::next(j)) {
             compares++;
-#endif
-            if (arr.at(j) < arr.at(el)) {
+            if (!predicate(*j, *el)){
                 el = j;
             }
         }
 
         if (el != i){ 
-            std::swap(arr.at(i), arr.at(el));
-#ifdef SORT_VERBOSE
+            std::swap(*i, *el);
             swaps++;
-#endif
-#ifdef SORT_VIZ
-            viz(arr);
-#endif
         }
     }
-#ifdef SORT_VIZ
-    viz(arr);
-#endif
 }
 
-template<class T>
-#ifdef SORT_VERBOSE
-void selection(std::vector<T> &arr, int &swaps, int &compares){
-	selection(arr, order::regular, 0, arr.size(), swaps, compares);
-#else
-void selection(std::vector<T> &arr){
-	selection(arr, order::regular, 0, arr.size());
-#endif
+template<class It, class Pred>
+void selection(It beg, It end, Pred predicate){
+    static size_t swaps, compares;
+    selection(beg, end, predicate, swaps, compares);
+}
+
+template<class It>
+void selection(It beg, It end){
+	using T = typename It::value_type;
+	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
+    selection(beg, end, func);
+}
+
 }

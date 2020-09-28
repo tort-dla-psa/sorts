@@ -1,134 +1,89 @@
 #pragma once
-#include "sort.h"
-#include <vector>
 #include <algorithm>
 #include <functional>
 
-template<class T>
-#ifdef SORT_VERBOSE
-void quick_hoare(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
-#else
-void quick_hoare(std::vector<T> &arr, order o, int begin, int end){
-#endif
-#ifdef SORT_VIZ
-	viz(arr);
-#endif
-	if(begin>=end){
+namespace sorts{
+
+template<class It, class Pred>
+void quick_hoare(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+	if(std::distance(beg, end)<=0){
 		return;
 	}
-	auto predicate = (o == regular)?
-		[](const T &el1, const T &el2){ return el1>el2; }
-		:
-		[](const T &el1, const T &el2){ return el1<el2; };
 
-	int pivot_place = begin;
-	const auto &pivot = arr.at(pivot_place);
-	auto i = begin-1;
-	auto j = end+1;
+	auto pivot_place = beg;
+	const auto &pivot = *pivot_place;
+	auto i = beg;
+	auto j = std::prev(end);
 	while(true){
-		do{
-			i++;
-#ifdef SORT_VERBOSE
+		while(predicate(pivot, *i)){
+			i = std::next(i);
 			compares++;
-#endif
-		}while(predicate(pivot,arr.at(i)));
-		do{
-			j--;
-#ifdef SORT_VERBOSE
+		}
+		while(predicate(*j, pivot)){
+			j = std::prev(j);
 			compares++;
-#endif
-		}while(predicate(arr.at(j),pivot));
-		if(i >= j){
+		}
+		if(std::distance(i, j) <= 0){
 			pivot_place = j;
 			break;
 		}
-		std::swap(arr.at(i), arr.at(j));
-#ifdef SORT_VERBOSE
+		std::swap(*i, *j);
 		swaps++;
-#endif
-#ifdef SORT_VIZ
-		viz(arr);
-#endif
 	}
-#ifdef SORT_VERBOSE
-	quick_hoare(arr, o, begin, pivot_place, swaps, compares);
-	quick_hoare(arr, o, pivot_place+1, end, swaps, compares);
-#else
-	quick_hoare(arr, o, begin, pivot_place);
-	quick_hoare(arr, o, pivot_place+1, end);
-#endif
-#ifdef SORT_VIZ
-	viz(arr);
-#endif
+	quick_hoare(beg, pivot_place, predicate, swaps, compares);
+	quick_hoare(std::next(pivot_place), end, predicate, swaps, compares);
 }
 
-template<class T>
-#ifdef SORT_VERBOSE
-void quick_hoare(std::vector<T> &arr, int &swaps, int &compares){
-	quick_hoare(arr, order::regular, 0, arr.size()-1, swaps, compares);
-#else
-void quick_hoare(std::vector<T> &arr){
-	quick_hoare(arr, order::regular, 0, arr.size()-1);
-#endif
+template<class It, class Pred>
+void quick_hoare(It beg, It end, Pred predicate){
+    static size_t swaps, compares;
+    quick_hoare(beg, end, predicate, swaps, compares);
+}
+
+template<class It>
+void quick_hoare(It beg, It end){
+	using T = typename It::value_type;
+	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
+    quick_hoare(beg, end, func);
 }
 
 
-template<class T>
-#ifdef SORT_VERBOSE
-void quick_lomuto(std::vector<T> &arr, order o, int begin, int end, int &swaps, int &compares){
-#else
-void quick_lomuto(std::vector<T> &arr, order o, int begin, int end){
-#endif
-#ifdef SORT_VIZ
-	viz(arr);
-#endif
-	if(begin>=end){
+template<class It, class Pred>
+void quick_lomuto(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+	if(std::distance(beg, end) <= 0){
 		return;
 	}
-	auto predicate = (o == regular)?
-		[](const T &el1, const T &el2){ return el1>el2; }
-		:
-		[](const T &el1, const T &el2){ return el1<el2; };
 
-	int pivot_place = end;
-	const auto &pivot = arr.at(pivot_place);
-	auto i = begin;
-	for(size_t j=begin; j<end; j++){
-#ifdef SORT_VERBOSE
+	auto pivot_place = end;
+	const auto &pivot = *pivot_place;
+	auto i = beg;
+	for(auto j=beg; j!=end; j=std::next(j)){
 		compares++;
-#endif
-		if(arr.at(j)<pivot){
-			std::swap(arr.at(i), arr.at(j));
-			i++;
-#ifdef SORT_VERBOSE
+		if(predicate(*j, pivot)){
+			std::swap(*i, *j);
+			i = std::next(i);
 			swaps++;
-#endif
-#ifdef SORT_VIZ
-			viz(arr);
-#endif
 		}
 	}
-	std::swap(arr.at(i), arr.at(end));
+	std::swap(*i, *std::prev(end));
 	pivot_place = i;
 
-#ifdef SORT_VERBOSE
-	quick_lomuto(arr, o, begin, pivot_place-1, swaps, compares);
-	quick_lomuto(arr, o, pivot_place+1, end, swaps, compares);
-#else
-	quick_lomuto(arr, o, begin, pivot_place-1);
-	quick_lomuto(arr, o, pivot_place+1, end);
-#endif
-#ifdef SORT_VIZ
-	viz(arr);
-#endif
+	quick_lomuto(beg, std::prev(pivot_place), predicate, swaps, compares);
+	quick_lomuto(std::next(pivot_place), end, predicate, swaps, compares);
 }
 
-template<class T>
-#ifdef SORT_VERBOSE
-void quick_lomuto(std::vector<T> &arr, int &swaps, int &compares){
-	quick_lomuto(arr, order::regular, 0, arr.size()-1, swaps, compares);
-#else
-void quick_lomuto(std::vector<T> &arr){
-	quick_lomuto(arr, order::regular, 0, arr.size()-1);
-#endif
+template<class It, class Pred>
+void quick_lomuto(It beg, It end, Pred predicate){
+    static size_t swaps, compares;
+    quick_lomuto(beg, end, predicate, swaps, compares);
+}
+
+template<class It>
+void quick_lomuto(It beg, It end){
+	using T = typename It::value_type;
+	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
+    quick_lomuto(beg, end, func);
+}
+
+
 }
