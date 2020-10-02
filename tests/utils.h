@@ -63,7 +63,7 @@ void test_sorts(std::vector<int> elements, Func lbd){
             << "\n";
 
         auto lst = gen_lst<T>(els);
-        auto times_lst =test_case<Time>(vec, lbd);
+        auto times_lst =test_case<Time>(lst, lbd);
         std::cout << "lst sort, els:" << els
             << " sort time:" << std::get<0>(times_lst)
             << " stl time:" << std::get<1>(times_lst)
