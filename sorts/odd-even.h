@@ -18,12 +18,12 @@ void odd_even(It beg, It end, Pred predicate){
 	};
 	do{
 		sorted = true;
-		for(auto i=beg; std::distance(i, end)>0; i = std::next(i,2)){
+		for(auto i=beg; std::distance(i, end)>1; i = std::next(i,2)){
 			iteration(i);
 		}
 		if(sorted){ break; }
 
-		for(auto i=std::next(beg); std::distance(i, end)>0; i = std::next(i,2)){
+		for(auto i=std::next(beg); std::distance(i, end)>1; i = std::next(i,2)){
 			iteration(i);
 		}
 	}while(!sorted);
