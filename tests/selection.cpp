@@ -1,11 +1,12 @@
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 #include <cassert>
-#include "../sorts/selection.h"
+#include "sorts/selection.h"
 #include "utils.h"
 
 void test_case(size_t size){
-    auto v0 = gen_vec<int>(2);
+    auto v0 = gen_vec<int>(size);
     auto v1 = v0;
     selection(v0);
     std::sort(v1.begin(), v1.end());

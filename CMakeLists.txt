@@ -4,7 +4,7 @@ project(sorts VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
-include_directories(sorts tests)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} sorts tests)
 add_executable(sorts main.cpp)
 
 set(CURSES_NEED_NCURSES TRUE)
@@ -32,6 +32,9 @@ add_test(test_quick test_quick)
 
 add_executable(test_selection tests/selection.cpp)
 add_test(test_selection test_selection)
+
+add_executable(test_merge tests/merge.cpp)
+add_test(test_merge test_merge)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
