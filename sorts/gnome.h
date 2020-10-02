@@ -5,7 +5,7 @@
 namespace sorts{
 
 template<class It, class Pred>
-void gnome(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+void gnome(It beg, It end, Pred predicate){
 	auto pos = beg;
 	while(pos != end){
 		if(pos == beg){
@@ -23,17 +23,9 @@ void gnome(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
 	}
 }
 
-template<class It, class Pred>
-void gnome(It beg, It end, Pred predicate){
-    static size_t swaps, compares;
-    gnome(beg, end, predicate, swaps, compares);
-}
-
 template<class It>
 void gnome(It beg, It end){
-	using T = typename It::value_type;
-	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
-    gnome(beg, end, func);
+	gnome(beg, end, std::greater<typename It::value_type>());
 }
 
 }

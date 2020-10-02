@@ -2,8 +2,10 @@
 #include <algorithm>
 #include <vector>
 
-template<class It>
-void merge(It beg, It end){
+namespace sorts{
+
+template<class It, class Pred>
+void merge(It beg, It end, Pred predicate){
     auto size = std::distance(beg, end);
     if(size < 2){
         return;
@@ -12,7 +14,15 @@ void merge(It beg, It end){
     auto left_beg = copy.begin();
     auto left_end = std::next(left_beg, size/2);
     auto right_end = copy.end();
-    merge(left_beg, left_end);
-    merge(left_end, right_end);
-    std::merge(left_beg, left_end, left_end, right_end, beg);
+    merge(left_beg, left_end, predicate);
+    merge(left_end, right_end, predicate);
+    std::inplace_merge(left_beg, left_end, right_end, predicate);
+    std::move(copy.begin(), copy.end(), beg);
+}
+
+template<class It>
+void merge(It beg, It end){
+    merge(beg, end, std::less<typename It::value_type>());
+}
+
 }

@@ -6,16 +6,14 @@
 namespace sorts{
 
 template<class It, class Pred>
-void cocktail(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
+void cocktail(It beg, It end, Pred predicate){
 	bool sorted;
-	static auto iteration = [&sorted, &compares, &swaps, &predicate](auto it){
+	static auto iteration = [&sorted, &predicate](auto it){
 		auto &el = *it;
 		auto &el_next = *std::next(it);
-		compares++;
 		if(predicate(el, el_next)){
 			std::swap(el, el_next);
 			sorted = false;
-			swaps++;
 		}
 	};
 	do{
@@ -33,17 +31,9 @@ void cocktail(It beg, It end, Pred predicate, size_t &swaps, size_t &compares){
 	}while(!sorted);
 }
 
-template<class It, class Pred>
-void cocktail(It beg, It end, Pred predicate){
-	static size_t swaps, compares;
-	cocktail(beg, end, predicate, swaps, compares);
-}
-
 template<class It>
 void cocktail(It beg, It end){
-	using T = typename It::value_type;
-	static auto func = [](const T &el0, const T &el1){ return el0>el1; };
-	cocktail(beg, end, func);
+	cocktail(beg, end, std::greater<typename It::value_type>());
 }
 
 }
